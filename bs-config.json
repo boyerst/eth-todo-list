@@ -1,0 +1,20 @@
+{
+  "server": {
+    "baseDir": [
+      "./src",
+      "./build/contracts"
+    ],
+    "routes": {
+      "/vendor": "./node_modules"
+    }
+  }
+}
+
+//proprietary browser sync configuration
+//Telling browser...
+  //(1)
+    //'Server configuration is ___'
+    //'We are pulling the files in from /src and /build/contracts'
+      //'Expose all of ↑ these specified directories to out web server root'
+  //(2) 'We are going to mask /vendor with ./node_modules'
+    // So any node_modules that exist in our project can be referenced in our vendor route
