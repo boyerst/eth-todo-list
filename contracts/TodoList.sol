@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 
 //Declare contract
 contract  TodoList {
+  //taskCount function
   uint public taskCount = 0;
 
   struct Task {
@@ -13,7 +14,7 @@ contract  TodoList {
     bool completed;
     //defines checkbox for completed items
   }
-
+  //tasks function...
   mapping(uint => Task) public tasks;
 
   constructor() public {

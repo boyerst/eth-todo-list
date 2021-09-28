@@ -1,6 +1,7 @@
 
 App = {
-
+  //Need a place to store App.contracts(2) from loadContract, otherwise TodoList will be undefined
+  contracts: {},
   load: async () => {
     //Async await patterns good for loading data from the blockchain
     //Call function to load Web3 library in order to connect to blockchain
@@ -57,6 +58,14 @@ App = {
   //Load contract from the blockchain by pulling it out of .json file
   loadContract: async () => {
     const todoList = await $.getJSON('TodoList.json')
+    //Pass in the TodoList.json file
+    //Will create a wrapper around the .json file that we created to allow interaction
+    App.contracts.TodoList = TruffleContract(todoList)
+    //Set the provider as web3 which we created in loadWeb3 function
+    App.contracts.TodoList.setProvider(App.web3Provider)
+    //Both App.contracts will give us a copy of the smart contract in JS
+    //Will tell us where it is on blockchain
+    //Will allow us to call all the functions we created (tasks, taskCount)
     console.log(todoList)
   }
 }
