@@ -2,11 +2,14 @@
 App = {
 
   load: async () => {
-    //Load Web3 library in order to connect to blockchain
-    //Can use config specified by MetaMask (see link below)
-    await App.loadWeb3()
-    await App.loadAccount()
     //Async await patterns good for loading data from the blockchain
+    //Call function to load Web3 library in order to connect to blockchain
+      //Can use config specified by MetaMask (see link below)
+    await App.loadWeb3()
+    //Call function to load and connect Ganache ETH account 
+    await App.loadAccount()
+    //Call function to load contracts from /contracts (ie TodoList.json)
+    await App.loadContract()
     // console.log("app loading...")
   },
 
@@ -50,9 +53,14 @@ App = {
   loadAccount: async () => {
     App.account = web3.eth.accounts[0]
     console.log(App.account)
+  },
+  //Load contract from the blockchain by pulling it out of .json file
+  loadContract: async () => {
+    const todoList = await $.getJSON('TodoList.json')
+    console.log(todoList)
   }
-
 }
+
 
 
 
