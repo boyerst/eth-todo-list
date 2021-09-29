@@ -1,5 +1,6 @@
 
 App = {
+  loading: false,
   //Need a place to store App.contracts(2) from loadContract
   //Otherwise TodoList will be undefined, so create empty object...        
   contracts: {},
@@ -15,6 +16,7 @@ App = {
     // console.log("app loading...")
     //Call function to render information in HTML page
     await App.render()
+
   },
 
   //CONNECT TO THE BLOCKCHAIN
@@ -64,26 +66,51 @@ App = {
   //RETRIEVE THE SMART CONTRACT
   //Load contract from the blockchain by pulling it out of .json file
   loadContract: async () => {
+    //Pass in the TodoList.json file  
     const todoList = await $.getJSON('TodoList.json')
-    //Pass in the TodoList.json file
-    //Will create a wrapper around the .json file that we created to allow interaction on the blockchain
+    //Create a wrapper around the .json file that we created to allow interaction on the blockchain
     App.contracts.TodoList = TruffleContract(todoList)
     //Set the provider as web3 which we created in loadWeb3 function
     App.contracts.TodoList.setProvider(App.web3Provider)
-    //Both App.contracts will give us a copy of the smart contract in JS
-    //Will tell us where it is on blockchain
-    //Will allow us to call all the functions we created (tasks, taskCount)
-    App.todoList = await App.contracts.TodoList.deployed()
-    //Gets a deployed copy of the smart contract
+    // ↑ Both App.contracts will give us a copy of the smart contract in JS
+      //Will tell us where it is on blockchain
+      //Will allow us to call all the functions we created (tasks, taskCount)
+    // ↓ Gets a deployed copy of the smart contract
       //"Hydrates" the smart contract with the values from the blockchain
       //Makes it a live contract
+    App.todoList = await App.contracts.TodoList.deployed()
     console.log(todoList)
   },
 
   //RENDER INFORMATION ON THE PAGE
   render: async () => {
-    //Show the account in our HTML
+    //Prevent double rendering
+      //IF app is loading, set state loading true so does not call this render function
+    if (App.loading) {
+      return
+    }
+    //Update state
+    App.setLoading(true)
+    //Render the account in our HTML
     $('#account').html(App.account)
+    //Update state
+    App.setLoading(false)
+  },
+
+  //UPDATE <?>
+    //Show loader/hide class=content (the ToDo List) when loading=true
+    //Hide loader/show class=content (the ToDo List) when loading=false
+  setLoading: (boolean) => {
+    App.loading = boolean
+    const loader = $('#loader')
+    const content = $('#content')
+    if (boolean) {
+      loader.show()
+      content.hide()
+    } else {
+      loader.hide()
+      content.show()
+    }
   }
 }
 
