@@ -85,26 +85,71 @@ App = {
   //RENDER INFORMATION ON THE PAGE
   render: async () => {
     //Prevent double rendering
-      //IF app is loading, set state loading true so does not call this render function
+      //If app is loading, set state loading: true so does not call this render function
     if (App.loading) {
       return
     }
     //Update state
+      //If loading: not true, load the account and update state to loading: false
     App.setLoading(true)
     //Render the account in our HTML
     $('#account').html(App.account)
+    //Render tasks
+    await App.renderTasks()
     //Update state
     App.setLoading(false)
   },
 
-  //UPDATE <?>
-    //Show loader/hide class=content (the ToDo List) when loading=true
-    //Hide loader/show class=content (the ToDo List) when loading=false
+  //RENDER TO DO LIST TASKS
+  renderTasks: async () => {
+    //Load the task count from the blockchain (need total number to execute for loop)
+    const taskCount = await App.todoList.taskCount()
+    //Fetch (from DOM) task template in order to render each task
+    const $taskTemplate = $('.taskTemplate')
+    //Render each task with a new task template (one by one, because mapping requires this)
+      //Do this by using above taskCount
+    for (var i = 1; i <= taskCount; i++) {
+      //Looping through and fetching task data from blockchain
+        // i = task ID, task is an array
+      const task = await App.todoList.tasks(i)
+        //Have to reference the following values by each item in the array
+      const taskId = task[0].toNumber()
+      const taskContent = task[1]
+      const taskCompleted = task[2]
+      //HTML for the task
+        //Use task template we fetch from DOM
+        
+      const $newTaskTemplate = $taskTemplate.clone()
+      //Find content from the task (found via for loop)
+      $newTaskTemplate.find('.content').html(taskContent)
+      //Find input (checkbox)
+      $newTaskTemplate.find('input')
+                      .prop('name', taskId)
+                      .prop('checked', taskCompleted)
+                      // .on('click', App.toggleCompleted)
+      //Put the task in the correct list (completed vs non-completed)
+      if (taskCompleted) {
+        $('#completedTaskList').append($newTaskTemplate)
+      } else {
+        $('#taskList').append($newTaskTemplate)
+      }
+    
+      //Show the task
+      $newTaskTemplate.show()
+
+    }
+  },
+
+
+  //UPDATE PAGE
+    //Show loader/hide class=content (the ToDo List) when loading: true
+    //Hide loader/show class=content (the ToDo List) when loading: false
   setLoading: (boolean) => {
     App.loading = boolean
     const loader = $('#loader')
     const content = $('#content')
-    if (boolean) {
+    //If loading: true...
+    if (boolean) { 
       loader.show()
       content.hide()
     } else {
@@ -113,7 +158,6 @@ App = {
     }
   }
 }
-
   
 
 
