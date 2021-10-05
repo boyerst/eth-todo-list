@@ -13,10 +13,22 @@ contract('TodoList', (accounts) => {
   it('deploys successfully', async () => {
     //Get the address
     const address = await this.todoList.address
-    //Ensure the address exists, and that it is not empty
+    //Assert that the address exists, and that it is not empty
     assert.notEqual(address, 0x0)
     assert.notEqual(address, '')
     assert.notEqual(address, null)
     assert.notEqual(address, undefined)
+  })
+  //Test to ensure tasks listed
+  it('lists tasks', async () => {
+    //Get the taskCount
+    const taskCount = await this.todoList.taskCount()
+    //Fetch the task out of mapping function (ensuring task exists where the taskCount is)
+    const task = await this.todoList.tasks(taskCount)  
+    //Assert that the taskID is equal to the taskCount (that it is set correctly)
+    assert.equal(task.id.toNumber(), taskCount.toNumber())
+    assert.equal(task.content, 'Here is a really important task that MUST be completed')
+    assert.equal(task.completed, false)
+    assert.equal(taskCount.toNumber(), 1)
   })
 })
