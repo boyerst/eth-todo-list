@@ -19,7 +19,7 @@ contract('TodoList', (accounts) => {
     assert.notEqual(address, null)
     assert.notEqual(address, undefined)
   })
-  //Test to ensure tasks listed
+  //Test to ensure tasks and task values listed correctly
   it('lists tasks', async () => {
     //Get the taskCount
     const taskCount = await this.todoList.taskCount()
@@ -27,8 +27,11 @@ contract('TodoList', (accounts) => {
     const task = await this.todoList.tasks(taskCount)  
     //Assert that the taskID is equal to the taskCount (that it is set correctly)
     assert.equal(task.id.toNumber(), taskCount.toNumber())
+    //Test task content
     assert.equal(task.content, 'Here is a really important task that MUST be completed')
+    //Task being tested is not completed...
     assert.equal(task.completed, false)
+    //In this case we specifiy it is 1 because this is Task 1
     assert.equal(taskCount.toNumber(), 1)
   })
 })
