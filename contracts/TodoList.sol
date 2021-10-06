@@ -24,7 +24,7 @@ contract  TodoList {
     string content, 
     bool completed
 
-  )
+  );
 
   constructor() public {
     createTask("Here is a really important task that MUST be completed");
@@ -38,7 +38,7 @@ contract  TodoList {
     tasks[taskCount] = Task(taskCount, _content, false);
     //Call event TaskCreated()...
       //Pass in the args: id from taskCount, _content from this function, false from completed bool)
-    emit TaskCreated(taskCount, _content, false)
+    emit TaskCreated(taskCount, _content, false);
  
 
 

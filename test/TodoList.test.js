@@ -34,4 +34,23 @@ contract('TodoList', (accounts) => {
     //In this case we specifiy it is 1 because this is Task 1
     assert.equal(taskCount.toNumber(), 1)
   })
+
+  it('creates tasks', async () => {
+    //Get the task, ensure new task was created
+    const result = await this.todoList.createTask('A new task')
+    //Get the task count
+    const taskCount = await this.todoList.taskCount()
+    //Assert that the taskCount is the same as we expect  
+    assert.equal(taskCount, 2)
+    console.log(result)
+    //Test if the new event was actually triggered
+      //Do this by analyzing the logs of the newly created task to check if id, content and completed are the same
+      //Get the event using the result of the createTask function we get above via async await pattern
+      //The event is inside of the result (the first item, thus [0])
+      //The args key is going to contain all of the values for the event
+    const event = result.logs[0]
+
+  })
+
+
 })
