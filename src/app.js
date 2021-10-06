@@ -16,6 +16,7 @@ App = {
     // console.log("app loading...")
     //Call function to render information in HTML page
     await App.render()
+    web3.eth.defaultAccount = web3.eth.accounts[0]
 
   },
 
@@ -138,6 +139,22 @@ App = {
       $newTaskTemplate.show()
 
     }
+  },
+
+  //CREATE TASKS
+  createTask: async () => {
+    App.setLoading(true)
+    //#newTask is the id/name of the input from the form in index.html
+      //From the form, we will fetch the value of the input, give it a value (Whatever is filled in the form)
+    const content = $('#newTask').val()
+    //Call the smart contract function (add thus web3.js/truffle contract library) so can talk to the blockchain and update it
+      //Also will pass in the content from the value
+    await App.todoList.createTask(content)
+    //Will also include a shortcut to refresh the page after we call the smart contract
+      //This will fetch all of the tasks listed on the blockchain again and list them out
+      //Another option would be to listen for the event, but could cause a double rendering issue
+    window.location.reload()
+
   },
 
 
