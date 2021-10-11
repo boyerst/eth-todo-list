@@ -19,12 +19,19 @@ contract  TodoList {
 
   //Broadcast an event that this task was created (avail for end user to be notified of event)
   event TaskCreated(
-    //add args to event...
+    //Pass in 3 args
     uint id,
     string content, 
     bool completed
-
   );
+
+  //For emiting in toggleCompleted function
+  event TaskCompleted(
+    //Pass in 2 args
+    uint id,
+    bool completed
+  );
+
 
   constructor() public {
     createTask("Here is a really important task that MUST be completed");
@@ -36,12 +43,21 @@ contract  TodoList {
     //put it inside of mapping
     //taskCount = new ID, content = content of task, false bc not completed yet    
     tasks[taskCount] = Task(taskCount, _content, false);
-    //Call event TaskCreated()...
+    //Emit event TaskCreated()...
       //Pass in the args: id from taskCount, _content from this function, false from completed bool)
     emit TaskCreated(taskCount, _content, false);
- 
-
-
+  }
+  //Pass in parameter (the id of the task to toggle)
+  function toggleCompleted(uint _id) public {
+    //Get the task out of the mapping (same way we did in createTask)
+      //Assign it to a variable with the type Task
+    Task memory _task = tasks[_id];
+    //Mark as opposite of whatever did before
+    _task.completed = !_task.completed;
+    //Put it back into the mapping
+    tasks[_id] = _task;
+    //Emit event TaskCompleted()...
+    emit TaskCompleted(_id, _task.completed);
   }
 
 }

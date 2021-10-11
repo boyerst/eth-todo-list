@@ -57,4 +57,22 @@ contract('TodoList', (accounts) => {
   })
 
 
+  it('toggles task completion', async () => {
+    //Pass in (1) for the first task
+    //Test process..
+      // (1)Toggling completed, passing in id of 1st task (which already made within the contructor)
+    const result = await this.todoList.toggleCompleted(1) 
+      // (2)Get the task and check if completed (true)
+    const task = await this.todoList.tasks(1) 
+      // (3)Ensure the event was completed 
+    assert.equal(task.completed, true)
+      // (4) Get event by digging into the result
+    const event = result.logs[0].args
+      // (5) Ensure said id = 1
+    assert.equal(event.id.toNumber(), 1)
+      // (6) Ensure task completed is true
+    assert.equal(event.completed, true)
+  })
+
+
 })
