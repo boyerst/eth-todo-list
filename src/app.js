@@ -127,7 +127,7 @@ App = {
       $newTaskTemplate.find('input')
                       .prop('name', taskId)
                       .prop('checked', taskCompleted)
-                      // .on('click', App.toggleCompleted)
+                      .on('click', App.toggleCompleted)
       //Put the task in the correct list (completed vs non-completed)
       if (taskCompleted) {
         $('#completedTaskList').append($newTaskTemplate)
@@ -155,6 +155,16 @@ App = {
       //Another option would be to listen for the event, but could cause a double rendering issue
     window.location.reload()
 
+  },
+
+  //TOGGLE COMPLETED TASKS
+    //Has an event listener to call (onClick), so pass in e for event
+  toggleCompleted: async (e) => {
+    App.setLoading(true)
+    //Event will contain name of the task being completed
+    const taskId = e.target.name
+    await App.todoList.toggleCompleted(taskId)
+    window.location.reload()
   },
 
 
