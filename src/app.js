@@ -1,5 +1,7 @@
 
+
 App = {
+
   loading: false,
   //Need a place to store App.contracts(2) from loadContract
   //Otherwise TodoList will be undefined, so create empty object...        
@@ -143,6 +145,7 @@ App = {
 
   //CREATE TASKS
   createTask: async () => {
+    //When this function is called, show app loading on screen
     App.setLoading(true)
     //#newTask is the id/name of the input from the form in index.html
       //From the form, we will fetch the value of the input, give it a value (Whatever is filled in the form)
